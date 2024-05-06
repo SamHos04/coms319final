@@ -1,9 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require("body-parser");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
+
 
 mongoose.connect('mongodb://localhost:27017/finaldata', {
   useNewUrlParser: true, 
@@ -20,4 +23,18 @@ const url = "mongodb://127.0.0.1:27017";
 const dbName = "finalData";
 const client = new MongoClient(url);
 const db = client.db(dbName);
+
+app.get("/finalData")
+
+app.get("/finalData", async (req, res) => {
+    await client.connect();
+    console.log("Node connected successfully to GET MongoDB");
+    const query = {};
+    const results = await db.collection("ArtistsAndArtwork").find(query).limit(100).toArray();
+    console.log(results);
+    res.status(200);
+    res.send(results);
+    });
+
+
 
