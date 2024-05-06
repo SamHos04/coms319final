@@ -24,17 +24,57 @@ const dbName = "finalData";
 const client = new MongoClient(url);
 const db = client.db(dbName);
 
-app.get("/finalData")
+const port = "8081";
+const host = "localhost";
 
-app.get("/finalData", async (req, res) => {
-    await client.connect();
-    console.log("Node connected successfully to GET MongoDB");
-    const query = {};
-    const results = await db.collection("ArtistsAndArtwork").find(query).limit(100).toArray();
-    console.log(results);
-    res.status(200);
-    res.send(results);
-    });
+//Get Artists
+app.get('/getArtists', async (req, res) => {
+    try {
+      const artists = await db.collection('artists').find().toArray();
+      res.json(artists);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+//Get Artwork
+app.get('/getArtwork', async (req, res) => {
+    try {
+      const artists = await db.collection('artists').find().toArray();
+      res.json(artists);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+//Get artists by id
+app.get('getArtists/:id', async (req, res) => {
+    try {
+      const artist = await db.collection('artists').findOne({ _id: req.params.id });
+      if (!artist) {
+        return res.status(404).json({ message: 'Artist not found' });
+      }
+      res.json(artist);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+//Get artwork by id
+app.get('getArtwork/:id', async (req, res) => {
+    try {
+      const artist = await db.collection('artists').findOne({ _id: req.params.id });
+      if (!artist) {
+        return res.status(404).json({ message: 'Artist not found' });
+      }
+      res.json(artist);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  
+  
+
+  
+
 
 
 
