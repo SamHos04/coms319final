@@ -1,82 +1,72 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require("body-parser");
+
 const app = express();
+const port = 8081;
+const host = 'localhost';
+
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
-
 
 mongoose.connect('mongodb://localhost:27017/finaldata', {
-  useNewUrlParser: true, 
-  useUnifiedTopology: true
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('Failed to connect to MongoDB:', err));
-app.listen(port, () => {
-    console.log("App listening at http://%s:%s", host, port);
-    });
-    
-const { MongoClient } = require("mongodb");
-const url = "mongodb://127.0.0.1:27017";
-const dbName = "finalData";
-const client = new MongoClient(url);
-const db = client.db(dbName);
 
-const port = "8081";
-const host = "localhost";
+const Artist = require('./models/artist'); 
+const Artwork = require('./models/artwork'); 
 
-//Get Artists
+// Get Artists
 app.get('/getArtists', async (req, res) => {
     try {
-      const artists = await db.collection('artists').find().toArray();
-      res.json(artists);
+        const artists = await Artist.find();
+        res.json(artists);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  });
-//Get Artwork
+});
+
+// Get Artwork
 app.get('/getArtwork', async (req, res) => {
     try {
-      const artists = await db.collection('artists').find().toArray();
-      res.json(artists);
+        const artwork = await Artwork.find();
+        res.json(artwork);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  });
-//Get artists by id
-app.get('getArtists/:id', async (req, res) => {
+});
+
+// Get artists by id
+app.get('/getArtists/:id', async (req, res) => {
     try {
-      const artist = await db.collection('artists').findOne({ _id: req.params.id });
-      if (!artist) {
-        return res.status(404).json({ message: 'Artist not found' });
-      }
-      res.json(artist);
+        const artist = await Artist.findById(req.params.id);
+        if (!artist) {
+            return res.status(404).json({ message: 'Artist not found' });
+        }
+        res.json(artist);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  });
-//Get artwork by id
-app.get('getArtwork/:id', async (req, res) => {
+});
+
+// Get artwork by id
+app.get('/getArtwork/:id', async (req, res) => {
     try {
-      const artist = await db.collection('artists').findOne({ _id: req.params.id });
-      if (!artist) {
-        return res.status(404).json({ message: 'Artist not found' });
-      }
-      res.json(artist);
+        const artwork = await Artwork.findById(req.params.id);
+        if (!artwork) {
+            return res.status(404).json({ message: 'Artwork not found' });
+        }
+        res.json(artwork);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  });
+});
 
-  
-  
-
-  
-
-
-
-
-
-
+app.listen(port, host, () => {
+    console.log(`App listening at http://${host}:${port}`);
+});
