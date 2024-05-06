@@ -22,7 +22,7 @@ const Artist = require('./models/artist');
 const Artwork = require('./models/artwork'); 
 
 // Get Artists
-app.get('/artists', async (req, res) => {
+app.get('/getArtists', async (req, res) => {
     try {
         const artists = await Artist.find();
         res.json(artists);
@@ -32,7 +32,7 @@ app.get('/artists', async (req, res) => {
 });
 
 // Get Artwork
-app.get('/artwork', async (req, res) => {
+app.get('/getArtwork', async (req, res) => {
     try {
         const artwork = await Artwork.find();
         res.json(artwork);
