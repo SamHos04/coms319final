@@ -22,7 +22,7 @@ const Artist = require('./models/artist');
 const Artwork = require('./models/artwork'); 
 
 // Get Artists
-app.get('/getArtists', async (req, res) => {
+app.get('/artists', async (req, res) => {
     try {
         const artists = await Artist.find();
         res.json(artists);
@@ -32,7 +32,7 @@ app.get('/getArtists', async (req, res) => {
 });
 
 // Get Artwork
-app.get('/getArtwork', async (req, res) => {
+app.get('/artwork', async (req, res) => {
     try {
         const artwork = await Artwork.find();
         res.json(artwork);
@@ -42,7 +42,7 @@ app.get('/getArtwork', async (req, res) => {
 });
 
 // Get artists by id
-app.get('/getArtists/:id', async (req, res) => {
+app.get('/artists/:id', async (req, res) => {
     try {
         const artist = await Artist.findById(req.params.id);
         if (!artist) {
@@ -55,7 +55,7 @@ app.get('/getArtists/:id', async (req, res) => {
 });
 
 // Get artwork by id
-app.get('/getArtwork/:id', async (req, res) => {
+app.get('/artwork/:id', async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
         if (!artwork) {
@@ -66,6 +66,76 @@ app.get('/getArtwork/:id', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+//Create a new artist
+app.post('/artists', async (req, res) => {
+    try {
+        const artist = new Artist(req.body);
+        await artist.save();
+        res.status(201).send(artist);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+//Create a new artwork
+app.post('/artwork', async (req, res) => {
+    try {
+        const artwork = new Artwork(req.body);
+        await artwork.save();
+        res.status(201).send(artwork);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+// Update an artist by ID
+app.patch('/artists/:id', async (req, res) => {
+    try {
+        const artist = await Artist.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!artist) {
+            return res.status(404).send();
+        }
+        res.send(artist);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+// Update artwork by ID
+app.patch('/artwork/:id', async (req, res) => {
+    try {
+        const artwork = await Artwork.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!artwork) {
+            return res.status(404).send();
+        }
+        res.send(artwork);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+// Delete an artist by ID
+app.delete('/artists/:id', async (req, res) => {
+    try {
+        const artist = await Artist.findByIdAndDelete(req.params.id);
+        if (!artist) {
+            return res.status(404).send();
+        }
+        res.send(artist);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+// Delete an artwork by ID
+app.delete('/artwork/:id', async (req, res) => {
+    try {
+        const artwork = await Artwork.findByIdAndDelete(req.params.id);
+        if (!artwork) {
+            return res.status(404).send();
+        }
+        res.send(artwork);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 
 app.listen(port, host, () => {
     console.log(`App listening at http://${host}:${port}`);
