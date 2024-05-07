@@ -54,14 +54,17 @@ app.post('/artists', async (req, res) => {
 // Get all artists
 app.get('/artists', async (req, res) => {
     try {
-        const artists = await Artist.find();
-        console.log('Fetched artists:', artists); // Log fetched artists
-        res.json(artists);
+      const artists = await Artist.find();
+      const artistData = artists.map(artist => ({
+        ...artist.toJSON(),
+        image: fs.readFileSync(artist.imageOfPerson) // Read the image file
+      }));
+      res.json(artistData);
     } catch (error) {
-        console.error('Error fetching artists:', error);
-        res.status(500).json({ message: 'Error fetching artists', error });
+      console.error('Error fetching artists:', error);
+      res.status(500).json({ message: 'Error fetching artists', error });
     }
-});
+  });
 
 // Update an artist by ID
 app.put('/artists/:id', async (req, res) => {
@@ -103,14 +106,17 @@ app.post('/artwork', async (req, res) => {
 // Get all artwork
 app.get('/artwork', async (req, res) => {
     try {
-        const artwork = await Artwork.find();
-        console.log('Fetched artwork:', artwork); // Log fetched artwork
-        res.json(artwork);
+      const artwork = await Artwork.find();
+      const artworkData = artwork.map(art => ({
+        ...art.toJSON(),
+        image: fs.readFileSync(art.imageOfArt) // Read the image file
+      }));
+      res.json(artworkData);
     } catch (error) {
-        console.error('Error fetching artwork:', error);
-        res.status(500).json({ message: 'Error fetching artwork', error });
+      console.error('Error fetching artwork:', error);
+      res.status(500).json({ message: 'Error fetching artwork', error });
     }
-});
+  });
 
 // Update artwork by ID
 app.put('/artwork/:id', async (req, res) => {
