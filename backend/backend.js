@@ -11,7 +11,7 @@ const host = 'localhost';
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/finaldata', { 
+mongoose.connect('mongodb://localhost:27017/finalData', { 
     useNewUrlParser: true, 
     useUnifiedTopology: true
 })
@@ -35,7 +35,7 @@ const artworkSchema = new mongoose.Schema({
     price: Number
 }, { collection: 'Artwork'});
 
-const Artist = mongoose.model('Artist', artistSchema);
+const Artist = mongoose.model('Artists', artistSchema);
 const Artwork = mongoose.model('Artwork', artworkSchema);
 
 // Create a new artist
@@ -54,7 +54,8 @@ app.post('/artists', async (req, res) => {
 // Get all artists
 app.get('/listArtists', async (req, res) => {
     try {
-      const artists = await Artist.find();
+      const artists = await Artist.find({});
+      console.log()
       const artistData = artists.map(artist => ({
         ...artist.toJSON(),
         image: fs.readFileSync(artist.imageOfPerson) // Read the image file
