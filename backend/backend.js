@@ -9,9 +9,7 @@ const port = 8081;
 const host = 'localhost';
 
 app.use(express.json());
-app.use(cors({
-    origin: 'http://localhost:8081' 
-  }));
+app.use(cors());
 
 mongoose.connect('mongodb://localhost:27017/finaldata', { 
     useNewUrlParser: true, 

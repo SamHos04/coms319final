@@ -14,7 +14,7 @@ function ArtistProfiles() {
   const fetchArtistProfiles = async () => {
     try {
       // Fetch artist profiles from backend API
-      const response = await fetch("http://localhost:8081/artists");
+      const response = await fetch("http://localhost:8081/listArtists");
       const data = await response.json();
 
       // Fetch image for each artist in parallel
