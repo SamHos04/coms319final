@@ -12,8 +12,7 @@ function ArtGallery() {
 
   const fetchArtwork = async () => {
     try {
-      
-      const response = await fetch('/api/artworks'); // Updated endpoint
+      const response = await fetch("http://localhost:8081/listArtwork"); // Updated endpoint
       const data = await response.json();
       setArtwork(data);
     } catch (error) {

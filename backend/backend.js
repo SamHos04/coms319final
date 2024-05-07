@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const fs = require('fs');
+
 
 const app = express();
 const port = 8081;
@@ -52,7 +54,7 @@ app.post('/artists', async (req, res) => {
 });
 
 // Get all artists
-app.get('/artists', async (req, res) => {
+app.get('/listArtists', async (req, res) => {
     try {
       const artists = await Artist.find();
       const artistData = artists.map(artist => ({
@@ -62,7 +64,7 @@ app.get('/artists', async (req, res) => {
       res.json(artistData);
     } catch (error) {
       console.error('Error fetching artists:', error);
-      res.status(500).json({ message: 'Error fetching artists', error });
+      res.status(200).json({ message: 'Error fetching artists', error });
     }
   });
 
@@ -104,7 +106,7 @@ app.post('/artwork', async (req, res) => {
 });
 
 // Get all artwork
-app.get('/artwork', async (req, res) => {
+app.get('/listArtwork', async (req, res) => {
     try {
       const artwork = await Artwork.find();
       const artworkData = artwork.map(art => ({
@@ -138,7 +140,7 @@ app.delete('/artwork/:id', async (req, res) => {
         res.json({ message: 'Artwork deleted', deletedArtwork });
     } catch (error) {
         console.error('Error deleting artwork:', error);
-        res.status(500).json({ message: 'Error deleting artwork', error });
+        res.status(200).json({ message: 'Error deleting artwork', error });
     }
 });
 
