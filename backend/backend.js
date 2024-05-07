@@ -7,135 +7,134 @@ const port = 8081;
 const host = 'localhost';
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:8081' 
+  }));
 
-mongoose.connect('mongodb://localhost:27017/finaldata', {
+mongoose.connect('mongodb://localhost:27017/finaldata', { 
     useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
+    useUnifiedTopology: true
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('Failed to connect to MongoDB:', err));
 
-const Artist = require('./models/artist'); 
-const Artwork = require('./models/artwork'); 
+const artistSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    mostFamousPiece: String,
+    countryOfOrigin: String,
+    otherWork: String,
+    imageOfPerson: String,
+}, {collection: 'Artists'});
 
-// Get Artists
-app.get('/getArtists', async (req, res) => {
+const artworkSchema = new mongoose.Schema({
+    artist: String,
+    id: Number,
+    imageOfArt: String,
+    name: String,
+    price: Number
+}, { collection: 'Artwork'});
+
+const Artist = mongoose.model('Artist', artistSchema);
+const Artwork = mongoose.model('Artwork', artworkSchema);
+
+// Create a new artist
+app.post('/artists', async (req, res) => {
+    const newArtist = new Artist(req.body);
+    try {
+        const savedArtist = await newArtist.save();
+        console.log('Artist saved:', savedArtist); // Log saved artist
+        res.status(201).json(savedArtist);
+    } catch (error) {
+        console.error('Error saving artist:', error);
+        res.status(400).json({ message: 'Error saving artist', error });
+    }
+});
+
+// Get all artists
+app.get('/artists', async (req, res) => {
     try {
         const artists = await Artist.find();
+        console.log('Fetched artists:', artists); // Log fetched artists
         res.json(artists);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Get Artwork
-app.get('/getArtwork', async (req, res) => {
-    try {
-        const artwork = await Artwork.find();
-        res.json(artwork);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Get artists by id
-app.get('/artists/:id', async (req, res) => {
-    try {
-        const artist = await Artist.findById(req.params.id);
-        if (!artist) {
-            return res.status(404).json({ message: 'Artist not found' });
-        }
-        res.json(artist);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Get artwork by id
-app.get('/artwork/:id', async (req, res) => {
-    try {
-        const artwork = await Artwork.findById(req.params.id);
-        if (!artwork) {
-            return res.status(404).json({ message: 'Artwork not found' });
-        }
-        res.json(artwork);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-//Create a new artist
-app.post('/artists', async (req, res) => {
-    try {
-        const artist = new Artist(req.body);
-        await artist.save();
-        res.status(201).send(artist);
     } catch (error) {
-        res.status(400).send(error);
+        console.error('Error fetching artists:', error);
+        res.status(500).json({ message: 'Error fetching artists', error });
     }
 });
-//Create a new artwork
-app.post('/artwork', async (req, res) => {
-    try {
-        const artwork = new Artwork(req.body);
-        await artwork.save();
-        res.status(201).send(artwork);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
+
 // Update an artist by ID
-app.patch('/artists/:id', async (req, res) => {
+app.put('/artists/:id', async (req, res) => {
     try {
-        const artist = await Artist.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!artist) {
-            return res.status(404).send();
-        }
-        res.send(artist);
+        const updatedArtist = await Artist.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        console.log('Updated artist:', updatedArtist); // Log updated artist
+        res.json(updatedArtist);
     } catch (error) {
-        res.status(400).send(error);
+        console.error('Error updating artist:', error);
+        res.status(500).json({ message: 'Error updating artist', error });
     }
 });
-// Update artwork by ID
-app.patch('/artwork/:id', async (req, res) => {
-    try {
-        const artwork = await Artwork.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!artwork) {
-            return res.status(404).send();
-        }
-        res.send(artwork);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
+
 // Delete an artist by ID
 app.delete('/artists/:id', async (req, res) => {
     try {
-        const artist = await Artist.findByIdAndDelete(req.params.id);
-        if (!artist) {
-            return res.status(404).send();
-        }
-        res.send(artist);
+        const deletedArtist = await Artist.findByIdAndDelete(req.params.id);
+        console.log('Deleted artist:', deletedArtist); // Log deleted artist
+        res.json({ message: 'Artist deleted', deletedArtist });
     } catch (error) {
-        res.status(500).send(error);
-    }
-});
-// Delete an artwork by ID
-app.delete('/artwork/:id', async (req, res) => {
-    try {
-        const artwork = await Artwork.findByIdAndDelete(req.params.id);
-        if (!artwork) {
-            return res.status(404).send();
-        }
-        res.send(artwork);
-    } catch (error) {
-        res.status(500).send(error);
+        console.error('Error deleting artist:', error);
+        res.status(500).json({ message: 'Error deleting artist', error });
     }
 });
 
+// Create a new artwork
+app.post('/artwork', async (req, res) => {
+    const newArtwork = new Artwork(req.body);
+    try {
+        const savedArtwork = await newArtwork.save();
+        console.log('Artwork saved:', savedArtwork); // Log saved artwork
+        res.status(201).json(savedArtwork);
+    } catch (error) {
+        console.error('Error saving artwork:', error);
+        res.status(400).json({ message: 'Error saving artwork', error });
+    }
+});
+
+// Get all artwork
+app.get('/artwork', async (req, res) => {
+    try {
+        const artwork = await Artwork.find();
+        console.log('Fetched artwork:', artwork); // Log fetched artwork
+        res.json(artwork);
+    } catch (error) {
+        console.error('Error fetching artwork:', error);
+        res.status(500).json({ message: 'Error fetching artwork', error });
+    }
+});
+
+// Update artwork by ID
+app.put('/artwork/:id', async (req, res) => {
+    try {
+        const updatedArtwork = await Artwork.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        console.log('Updated artwork:', updatedArtwork); // Log updated artwork
+        res.json(updatedArtwork);
+    } catch (error) {
+        console.error('Error updating artwork:', error);
+        res.status(500).json({ message: 'Error updating artwork', error });
+    }
+});
+
+// Delete artwork by ID
+app.delete('/artwork/:id', async (req, res) => {
+    try {
+        const deletedArtwork = await Artwork.findByIdAndDelete(req.params.id);
+        console.log('Deleted artwork:', deletedArtwork); // Log deleted artwork
+        res.json({ message: 'Artwork deleted', deletedArtwork });
+    } catch (error) {
+        console.error('Error deleting artwork:', error);
+        res.status(500).json({ message: 'Error deleting artwork', error });
+    }
+});
 
 app.listen(port, host, () => {
     console.log(`App listening at http://${host}:${port}`);
