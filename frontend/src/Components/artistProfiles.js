@@ -23,14 +23,6 @@ function ArtistProfiles() {
 
   return (
     <div>
-      <nav className="navbar">
-        <ul>
-          <li><a href="/">Homepage</a></li>
-          <li><a href="/art-gallery">Art Gallery</a></li>
-          <li><a href="/artist-profiles">Artist Profiles</a></li>
-          <li><a href="/about-us">About Us</a></li>
-        </ul>
-      </nav>
       <div className="container">
         <div className="row">
           {/* Map through artists array and render artist profiles */}

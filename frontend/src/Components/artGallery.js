@@ -22,14 +22,6 @@ function ArtGallery() {
 
   return (
     <div>
-      <nav className="navbar">
-        <ul>
-          <li><Link to="/">Homepage</Link></li>
-          <li><Link to="/art-gallery">Art Gallery</Link></li>
-          <li><Link to="/artist-profiles">Artist Profiles</Link></li>
-          <li><Link to="/about-us">About Us</Link></li>
-        </ul>
-      </nav>
       <div className="album py-5 bg-body-tertiary">
         <Container>
           <Row xs={1} sm={2} md={3} className="g-3">
