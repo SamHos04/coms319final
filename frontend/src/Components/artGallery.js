@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
@@ -12,7 +11,8 @@ function ArtGallery() {
 
   const fetchArtwork = async () => {
     try {
-      const response = await fetch('/getArtwork'); // Assuming this endpoint returns artwork data
+      
+      const response = await fetch('/api/artworks'); // Updated endpoint
       const data = await response.json();
       setArtwork(data);
     } catch (error) {
