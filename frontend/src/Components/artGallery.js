@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
-
 function ArtGallery() {
   const [artwork, setArtwork] = useState([]);
 
@@ -11,12 +10,16 @@ function ArtGallery() {
   }, []);
 
   const fetchArtwork = async () => {
-    try {
-      const response = await fetch("http://localhost:8081/listArtwork"); // Updated endpoint
-      const data = await response.json();
-      setArtwork(data);
-    } catch (error) {
-      console.error('Error fetching artwork:', error);
+    try{
+    const response = await fetch("http://localhost:8081/listArtwork");
+    const data = await response.json();
+
+    const artworkData = await Promise.all(data.map(async artwork => ({...artwork})))
+    setArtwork(artworkData);
+
+    }
+    catch (error){
+      console.error('error fetching artwork', error);
     }
   };
 

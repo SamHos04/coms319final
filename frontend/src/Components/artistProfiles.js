@@ -17,27 +17,13 @@ function ArtistProfiles() {
       const response = await fetch("http://localhost:8081/listArtists");
       const data = await response.json();
 
-      // Fetch image for each artist in parallel
       const artistData = await Promise.all(data.map(async artist => ({
         ...artist,
-        image: await fetchImage(artist.imageOfPerson)
       })));
 
       setArtists(artistData);
     } catch (error) {
       console.error('Error fetching artist profiles:', error);
-    }
-  };
-
-  // Function to fetch image from backend
-  const fetchImage = async (imageUrl) => {
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      return URL.createObjectURL(blob);
-    } catch (error) {
-      console.error('Error fetching image:', error);
-      return null;
     }
   };
 
