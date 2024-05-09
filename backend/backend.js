@@ -140,7 +140,38 @@ app.delete('/artwork/:id', async (req, res) => {
         res.status(200).json({ message: 'Error deleting artwork', error });
     }
 });
-
-app.listen(port, host, () => {
-    console.log(`App listening at http://${host}:${port}`);
-});
+// Additional or modified POST and DELETE endpoints for artwork
+app.post('/createArtwork', async (req, res) => {
+    const newArtwork = new Artwork({
+      artist: req.body.artist,
+      name: req.body.name,
+      imageOfArt: req.body.image,
+      price: req.body.price
+    });
+    try {
+      await newArtwork.save();
+      console.log('Artwork saved:', newArtwork); // Log saved artwork
+      res.status(201).json(newArtwork);
+    } catch (error) {
+      console.error('Error saving artwork:', error);
+      res.status(400).json({ message: 'Error saving artwork', error });
+    }
+  });
+  
+  app.delete('/deleteArtwork/:id', async (req, res) => {
+    try {
+      const deletedArtwork = await Artwork.findByIdAndDelete(req.params.id);
+      if (!deletedArtwork) {
+        return res.status(404).json({ message: 'Artwork not found' });
+      }
+      console.log('Deleted artwork:', deletedArtwork); // Log deleted artwork
+      res.status(200).json({ message: 'Artwork deleted', deletedArtwork });
+    } catch (error) {
+      console.error('Error deleting artwork:', error);
+      res.status(500).json({ message: 'Error deleting artwork', error });
+    }
+  });
+  
+  app.listen(port, host, () => {
+      console.log(`App listening at http://${host}:${port}`);
+  });
