@@ -16,7 +16,7 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
+        <nav class = "navbar">
           <ul>
             <li><Link to="/">Homepage</Link></li>
             <li><Link to="/art-gallery">Art Gallery</Link></li>

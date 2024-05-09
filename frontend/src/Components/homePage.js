@@ -11,10 +11,9 @@ function HomePage() {
       </section>
       <section className="featured-art">
         <h2>Featured Artwork</h2>
-        <img src="https://www.italianrenaissance.org/wp-content/uploads/Michelangelo-pieta-detail-2.jpg" alt="Featured Artwork" style={{ maxWidth: '30%', height: 'auto' }} />
+        <img src="./Artwork/Pietá.jpg" alt="Featured Artwork" style={{ maxWidth: '30%', height: 'auto' }} />
         <h3>Pietá by Michelangelo</h3>
         <p>This is the featured work because of its excellent marble structure, and its beauty.</p>
-        <p>Image from italianrenaissance.org</p>
       </section>
     </header>
   );
