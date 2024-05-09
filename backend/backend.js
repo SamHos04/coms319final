@@ -57,8 +57,7 @@ app.get('/listArtists', async (req, res) => {
       const artists = await Artist.find({});
       console.log()
       const artistData = artists.map(artist => ({
-        ...artist.toJSON(),
-        image: fs.readFileSync(artist.imageOfPerson) // Read the image file
+        ...artist.toJSON()
       }));
       res.json(artistData);
     } catch (error) {
@@ -109,8 +108,7 @@ app.get('/listArtwork', async (req, res) => {
     try {
       const artwork = await Artwork.find();
       const artworkData = artwork.map(art => ({
-        ...art.toJSON(),
-        image: fs.readFileSync(art.imageOfArt) // Read the image file
+        ...art.toJSON()
       }));
       res.json(artworkData);
     } catch (error) {

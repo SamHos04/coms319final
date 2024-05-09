@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Card, Container, Row, Col } from 'react-bootstrap';
 
 function ArtistProfiles() {
   // State to store artist profiles
@@ -29,21 +30,24 @@ function ArtistProfiles() {
 
   return (
     <div>
-      <div className="container">
-        <div className="row">
-          {/* Map through artists array and render artist profiles */}
-          {artists.map(artist => (
-            <div key={artist._id} className="col">
-              <div className="artist-profile">
-                <img src={artist.image} alt={`Portrait of ${artist.name}`} />
-                <h2>{artist.name}</h2>
-                <p><strong>Most Famous Piece:</strong> {artist.mostFamousPiece}</p>
-                <p><strong>Country of Origin:</strong> {artist.countryOfOrigin}</p>
-                <p><strong>Other Work:</strong> {artist.otherWork}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="album py-5 bg-body-tertiary">
+        <Container>
+          <Row xs={1} sm={2} md={3} className="g-3">
+            {artists.map(artists => (
+              <Col key={artists._id}>
+                <Card>
+                  <Card.Img variant="top" src={artists.imageOfPerson} />
+                  <Card.Body>
+                    <Card.Text>Most Famous Piece {artists.mostFamousPiece}</Card.Text>
+                    <Card.Title>Country: {artists.countryOfOrigin}</Card.Title>
+                    <Card.Title>Other work: {artists.otherWork}</Card.Title>
+                    
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </div>
     </div>
   );
